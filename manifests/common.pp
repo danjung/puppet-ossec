@@ -1,40 +1,21 @@
-
-#
-#
-class ossec::common {
+class ossec::common inherits ossec::params {
   if (!defined(File['/opt'])) {
     file { "/opt":
       ensure => directory
     }
   }
-  case $lsbdistid {
-    /(Ubuntu|ubuntu|Debian|debian)/ : {
-      $hidsagentservice='ossec-hids-agent'
-      $hidsagentpackage='ossec-hids-agent'
-      $hidsserverservice='ossec-hids-server'
-      $hidsserverpackage='ossec-hids-server'
-      if (!defined(File['/opt/debs'])) {
-        file { "/opt/debs":
-          ensure => directory
-        }
-      }
-      case "${lsbdistcodename}" {
-        lucid: { 
-          # install package
-#	  include apt::ppa::ossec
-        }
-        default : { fail("This ossec module has not been tested on your distribution (or 'redhat-lsb' package not installed)") }
-      }
-    }
-    /(CentOS|Redhat|RedHatEnterpriseServer)/ : {
-      $hidsagentservice='ossec-hids'
-      $hidsagentpackage='ossec-hids-client'
-      $hidsserverservice='ossec-hids'
-      $hidsserverpackage='ossec-hids-server'
-      case $operatingsystemrelease {
-        /^5/: {$redhatversion='el5'}
-        /^6/: {$redhatversion='el6'}
-      }
+
+  # Configure yum repo
+  exec { "setup-ossec-pkg-install" :
+    command => "wget -q -O - https://www.atomicorp.com/installers/atomic |sh",
+    path    => "/usr/bin:/usr/sbin:/bin:/usr/local/bin",
+    unless  => "test -f /etc/yum.repos.d/atomic.repo",
+  }
+
+  package { $hidspackage : ensure => installed, require => Exec["setup-ossec-pkg-install"] }
+
+  case $osfamily {
+    'RedHat' : {
       package { 'inotify-tools': ensure=>present}
       if (!defined(File['/opt/rpm'])) {
         file { "/opt/rpm":
