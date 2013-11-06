@@ -11,6 +11,8 @@ class ossec::server (
   include ossec::common
   include concat::setup
   include mysql
+
+  Class['Ossec::Common'] -> Class['Ossec::Server']
 	
   # install package
   package { $hidsserverpackage : ensure => installed, require => Exec["setup-ossec-pkg-install"] }
