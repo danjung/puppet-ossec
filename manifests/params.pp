@@ -4,7 +4,8 @@ class ossec::params {
       $hidspackage       = 'ossec-hids'
       $hidsagentservice  = 'ossec-hids-agent'
       $hidsagentpackage  = 'ossec-hids-agent'
-      $hidsserverservice = 'ossec-hids-server'
+      $hidsserverservice = 'ossec-control'
+      $hidsservicepath   = '/var/ossec/bin'
       $hidsserverpackage = 'ossec-hids-server'
     }
   }

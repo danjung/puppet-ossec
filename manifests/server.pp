@@ -16,12 +16,18 @@ class ossec::server (
 	
   # install package
   package { $hidsserverpackage : ensure => installed, require => Exec["setup-ossec-pkg-install"] }
-	
+
+  file { "/etc/init.d/${hidsserverservice}":
+    ensure  => present,
+    content => template('ossec/ossec-control.sh.erb'),
+    require => Package[$hidsserverpackage]
+  }
+
   service { $hidsserverservice:
-    ensure => running,
-    enable => true,
+    ensure    => running,
+    enable    => true,
     hasstatus => true,
-    require => Package[$hidsserverpackage],
+    require   => File["/etc/init.d/${hidsserverservice}"],
   }
 
   # configure ossec
