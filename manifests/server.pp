@@ -20,6 +20,7 @@ class ossec::server (
   file { "/etc/init.d/${hidsserverservice}":
     ensure  => present,
     content => template('ossec/ossec-control.sh.erb'),
+    mode    => 0755,
     require => Package[$hidsserverpackage]
   }
 
