@@ -9,43 +9,50 @@ class ossec::client (
   Class['Ossec::Client'] -> Class['Ossec::Post_Install_Workarounds']
 
   # install package
-  package { $hidsagentpackage : ensure => installed, require => Exec["setup-ossec-pkg-install"] }
+  package { $hidsclientpackage : ensure => installed, require => Exec["setup-ossec-pkg-install"] }
   
-  service { $hidsagentservice:
+  file { "/etc/init.d/${hidsserverservice}":
+    ensure  => present,
+    content => template('ossec/ossec-control-client.sh.erb'),
+    mode    => 0755,
+    require => Package[$hidsclientpackage]
+  }
+
+  service { $hidsclientservice:
     ensure    => running,
     enable    => true,
     hasstatus => true,
-    require   => Package[$hidsserverpackage],
+    require   => File["/etc/init.d/${hidsserverservice}"],
   }
   
   concat { '/var/ossec/etc/ossec.conf':
     owner => root,
     group => ossec,
     mode => 0440,
-    require => Package[$hidsagentpackage],
-    notify => Service[$hidsagentservice]
+    require => Package[$hidsclientpackage],
+    notify => Service[$hidsclientservice]
   }
 
   concat::fragment { "ossec.conf_10" :
     target => '/var/ossec/etc/ossec.conf',
     content => template("ossec/10_ossec_agent.conf.erb"),
     order => 10,
-    notify => Service[$hidsagentservice]
+    notify => Service[$hidsclientservice]
   }
   
   concat::fragment { "ossec.conf_99" :
     target => '/var/ossec/etc/ossec.conf',
     content => template("ossec/99_ossec_agent.conf.erb"),
     order => 99,
-    notify => Service[$hidsagentservice]
+    notify => Service[$hidsclientservice]
   }
 
   concat { "/var/ossec/etc/client.keys":
     owner   => "root",
     group   => "ossec",
     mode    => "640",
-    notify  => Service[$hidsagentservice],
-    require => Package[$ossec::common::hidsagentpackage]
+    notify  => Service[$hidsclientservice],
+    require => Package[$ossec::common::hidsclientpackage]
   }
   ossec::agentKey{ "ossec_agent_${hostname}_client": agent_id=>$uniqueid, agent_name => $hostname, agent_ip_address => $ipaddress}
   @@ossec::agentKey{ "ossec_agent_${hostname}_server": agent_id=>$uniqueid, agent_name => $hostname, agent_ip_address => $ipaddress}
