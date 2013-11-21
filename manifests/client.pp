@@ -5,6 +5,8 @@ class ossec::client (
   include ossec::common
   include concat::setup
 
+  Class['Ossec::Client'] -> Class['Ossec::Post_Install_Workarounds']
+
   # install package
   package { $hidsagentpackage : ensure => installed, require => Exec["setup-ossec-pkg-install"] }
   
