@@ -11,4 +11,9 @@ class ossec::params {
       $hidsservicepath    = "${install_home}/bin"
     }
   }
+
+  $agent_ip = $ec2_public_ipv4 ? {
+    undef   => $ipaddress,
+    default => $ec2_public_ipv4
+  }
 }
