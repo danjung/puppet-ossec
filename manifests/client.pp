@@ -24,6 +24,9 @@ class ossec::client (
     hasstatus => true,
     require   => File["/etc/init.d/${hidsserverservice}"],
   }
+
+  # Removed shared agent config, should be set on server not client
+  file { "${install_home}/etc/shared/agent.conf" : ensure => absent }
   
   concat { '/var/ossec/etc/ossec.conf':
     owner => root,
