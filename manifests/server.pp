@@ -59,6 +59,14 @@ class ossec::server (
     notify => Service[$hidsserverservice]
   }
 
+  file { "/var/ossec/etc/client.keys":
+    ensure => file,
+    owner   => "root",
+    group   => "ossec",
+    mode    => "640",
+    notify  => Service[$hidsserverservice]
+  }
+
   #concat { "/var/ossec/etc/client.keys":
   #  owner   => "root",
   #  group   => "ossec",
