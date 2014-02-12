@@ -50,15 +50,15 @@ class ossec::client (
     notify => Service[$hidsclientservice]
   }
 
-  concat { "/var/ossec/etc/client.keys":
-    owner   => "root",
-    group   => "ossec",
-    mode    => "640",
-    notify  => Service[$hidsclientservice],
-    require => Package[$ossec::common::hidsclientpackage]
-  }
-  ossec::agentKey{ "ossec_agent_${hostname}_client": agent_id=>$uniqueid, agent_name => $hostname, agent_ip_address => $agent_ip}
-  @@ossec::agentKey{ "ossec_agent_${hostname}_server": agent_id=>$uniqueid, agent_name => $hostname, agent_ip_address => $agent_ip}
+  #concat { "/var/ossec/etc/client.keys":
+  #  owner   => "root",
+  #  group   => "ossec",
+  #  mode    => "640",
+  #  notify  => Service[$hidsclientservice],
+  #  require => Package[$ossec::common::hidsclientpackage]
+  #}
+  #ossec::agentKey{ "ossec_agent_${hostname}_client": agent_id=>$uniqueid, agent_name => $hostname, agent_ip_address => $agent_ip}
+  #@@ossec::agentKey{ "ossec_agent_${hostname}_server": agent_id=>$uniqueid, agent_name => $hostname, agent_ip_address => $agent_ip}
 }
 
 

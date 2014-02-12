@@ -59,20 +59,20 @@ class ossec::server (
     notify => Service[$hidsserverservice]
   }
 
-  concat { "/var/ossec/etc/client.keys":
-    owner   => "root",
-    group   => "ossec",
-    mode    => "640",
-    notify  => Service[$hidsserverservice]
-  }
+  #concat { "/var/ossec/etc/client.keys":
+  #  owner   => "root",
+  #  group   => "ossec",
+  #  mode    => "640",
+  #  notify  => Service[$hidsserverservice]
+  #}
 
-  Ossec::AgentKey<<| |>>
+  #Ossec::AgentKey<<| |>>
 
-  concat::fragment { "var_ossec_etc_client.keys_end" :
-    target  => "/var/ossec/etc/client.keys",
-    order   => 99,
-    content => "\n",
-    notify => Service[$hidsserverservice]
-  }
+  #concat::fragment { "var_ossec_etc_client.keys_end" :
+  #  target  => "/var/ossec/etc/client.keys",
+  #  order   => 99,
+  #  content => "\n",
+  #  notify => Service[$hidsserverservice]
+  #}
 
 }
