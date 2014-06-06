@@ -4,7 +4,6 @@ class ossec::client (
 ) inherits ossec::params {
   include ossec::common
   include ossec::post_install_workarounds
-  include concat::setup
 
   Class['Ossec::Client'] -> Class['Ossec::Post_Install_Workarounds']
 
