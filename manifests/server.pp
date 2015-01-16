@@ -11,7 +11,6 @@ class ossec::server (
   ) inherits ossec::params {
   include ossec::common
   include ossec::post_install_workarounds
-  include concat::setup
   include mysql
 
   Class['Ossec::Common'] -> Class['Ossec::Server']
