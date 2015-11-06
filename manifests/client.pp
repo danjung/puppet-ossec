@@ -8,7 +8,7 @@ class ossec::client (
   Class['Ossec::Client'] -> Class['Ossec::Post_Install_Workarounds']
 
   # install package
-  package { $hidsclientpackage : ensure => installed, require => Exec["setup-ossec-pkg-install"] }
+  package { $hidsclientpackage : ensure => $ossec_version, require => Exec["setup-ossec-pkg-install"] }
   
   file { "/etc/init.d/${hidsserverservice}":
     ensure  => present,

@@ -9,6 +9,7 @@ class ossec::params {
       $hidsserverservice  = 'ossec-control'
       $hidsserverpackage  = 'ossec-hids-server'
       $hidsservicepath    = "${install_home}/bin"
+      $ossec_version      = hiera('ossec_version', 'installed')
     }
   }
 

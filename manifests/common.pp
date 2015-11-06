@@ -12,7 +12,7 @@ class ossec::common inherits ossec::params {
     unless  => "test -f /etc/yum.repos.d/atomic.repo",
   }
 
-  package { $hidspackage : ensure => installed, require => Exec["setup-ossec-pkg-install"] }
+  package { $hidspackage : ensure => $ossec_version, require => Exec["setup-ossec-pkg-install"] }
 
   case $osfamily {
     'RedHat' : {
